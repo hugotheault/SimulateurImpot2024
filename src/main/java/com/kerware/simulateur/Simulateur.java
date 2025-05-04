@@ -25,7 +25,7 @@ public class Simulateur {
 
 
     // Les limites des tranches de revenus imposables
-    private int l00 = 0 ;
+    private int l00 = 0;
     private int l01 = 11294;
     private int l02 = 28797;
     private int l03 = 82341;
