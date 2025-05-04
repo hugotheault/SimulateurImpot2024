@@ -3,6 +3,10 @@ package com.kerware.simulateurreusine;
 import com.kerware.simulateur.ICalculateurImpot;
 import com.kerware.simulateur.SituationFamiliale;
 
+/**
+ * Adaptateur entre l'interface générique ICalculateurImpot et l'implémentation spécifique SimulateurReusine.
+ * Ce pattern permet d'utiliser le simulateur existant dans un contexte plus générique.
+ */
 public class AdaptateurCalculateurImpotReusine implements ICalculateurImpot {
 
     private final SimulateurReusine simulateur;
@@ -13,13 +17,16 @@ public class AdaptateurCalculateurImpotReusine implements ICalculateurImpot {
     private int nbEnfantsHandicapes;
     private boolean parentIsole;
 
+    /**
+     * Constructeur par défaut. Initialise un simulateur Reusine.
+     */
     public AdaptateurCalculateurImpotReusine() {
         this.simulateur = new SimulateurReusine();
     }
 
     /**
-     *
-     * @param rn
+     * Définit le revenu net du déclarant 1.
+     * @param rn Revenu net du déclarant 1
      */
     @Override
     public void setRevenusNetDeclarant1(int rn) {
@@ -27,8 +34,8 @@ public class AdaptateurCalculateurImpotReusine implements ICalculateurImpot {
     }
 
     /**
-     *
-     * @param rn
+     * Définit le revenu net du déclarant 2.
+     * @param rn Revenu net du déclarant 2
      */
     @Override
     public void setRevenusNetDeclarant2(int rn) {
@@ -36,8 +43,8 @@ public class AdaptateurCalculateurImpotReusine implements ICalculateurImpot {
     }
 
     /**
-     *
-     * @param sf
+     * Définit la situation familiale du foyer fiscal.
+     * @param sf Situation familiale (marié, pacsé, célibataire, etc.)
      */
     @Override
     public void setSituationFamiliale(SituationFamiliale sf) {
@@ -45,8 +52,8 @@ public class AdaptateurCalculateurImpotReusine implements ICalculateurImpot {
     }
 
     /**
-     *
-     * @param nbe
+     * Définit le nombre d’enfants à charge dans le foyer.
+     * @param nbe Nombre d’enfants à charge
      */
     @Override
     public void setNbEnfantsACharge(int nbe) {
@@ -54,8 +61,8 @@ public class AdaptateurCalculateurImpotReusine implements ICalculateurImpot {
     }
 
     /**
-     *
-     * @param nbesh
+     * Définit le nombre d’enfants en situation de handicap dans le foyer.
+     * @param nbesh Nombre d’enfants handicapés à charge
      */
     @Override
     public void setNbEnfantsSituationHandicap(int nbesh) {
@@ -63,8 +70,8 @@ public class AdaptateurCalculateurImpotReusine implements ICalculateurImpot {
     }
 
     /**
-     *
-     * @param pi
+     * Indique si le foyer est composé d’un parent isolé.
+     * @param pi true si parent isolé, false sinon
      */
     @Override
     public void setParentIsole(boolean pi) {
@@ -72,7 +79,7 @@ public class AdaptateurCalculateurImpotReusine implements ICalculateurImpot {
     }
 
     /**
-     *
+     * Déclenche le calcul de l'impôt sur le revenu net en utilisant les données fournies.
      */
     @Override
     public void calculImpotSurRevenuNet() {
@@ -87,8 +94,8 @@ public class AdaptateurCalculateurImpotReusine implements ICalculateurImpot {
     }
 
     /**
-     *
-     * @return
+     * Retourne le revenu net du déclarant 1.
+     * @return Revenu net du déclarant 1
      */
     @Override
     public int getRevenuNetDeclatant1() {
@@ -96,8 +103,8 @@ public class AdaptateurCalculateurImpotReusine implements ICalculateurImpot {
     }
 
     /**
-     *
-     * @return
+     * Retourne le revenu net du déclarant 2.
+     * @return Revenu net du déclarant 2
      */
     @Override
     public int getRevenuNetDeclatant2() {
@@ -105,8 +112,8 @@ public class AdaptateurCalculateurImpotReusine implements ICalculateurImpot {
     }
 
     /**
-     *
-     * @return
+     * Retourne le montant de la contribution exceptionnelle.
+     * @return Contribution exceptionnelle à l'impôt
      */
     @Override
     public double getContribExceptionnelle() {
@@ -114,8 +121,8 @@ public class AdaptateurCalculateurImpotReusine implements ICalculateurImpot {
     }
 
     /**
-     *
-     * @return
+     * Retourne le revenu fiscal de référence.
+     * @return Revenu fiscal de référence
      */
     @Override
     public int getRevenuFiscalReference() {
@@ -123,8 +130,8 @@ public class AdaptateurCalculateurImpotReusine implements ICalculateurImpot {
     }
 
     /**
-     *
-     * @return
+     * Retourne le montant de l’abattement appliqué.
+     * @return Montant de l’abattement
      */
     @Override
     public int getAbattement() {
@@ -132,8 +139,8 @@ public class AdaptateurCalculateurImpotReusine implements ICalculateurImpot {
     }
 
     /**
-     *
-     * @return
+     * Retourne le nombre de parts fiscales du foyer.
+     * @return Nombre de parts
      */
     @Override
     public double getNbPartsFoyerFiscal() {
@@ -141,8 +148,8 @@ public class AdaptateurCalculateurImpotReusine implements ICalculateurImpot {
     }
 
     /**
-     *
-     * @return
+     * Retourne le montant de l'impôt avant décote.
+     * @return Impôt brut avant décote
      */
     @Override
     public int getImpotAvantDecote() {
@@ -150,8 +157,8 @@ public class AdaptateurCalculateurImpotReusine implements ICalculateurImpot {
     }
 
     /**
-     *
-     * @return
+     * Retourne le montant de la décote appliquée.
+     * @return Montant de la décote
      */
     @Override
     public int getDecote() {
@@ -159,8 +166,8 @@ public class AdaptateurCalculateurImpotReusine implements ICalculateurImpot {
     }
 
     /**
-     * 
-     * @return
+     * Retourne le montant final de l’impôt sur le revenu net après décote.
+     * @return Impôt net à payer
      */
     @Override
     public int getImpotSurRevenuNet() {

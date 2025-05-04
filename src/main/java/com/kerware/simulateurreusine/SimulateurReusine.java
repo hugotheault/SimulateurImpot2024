@@ -2,9 +2,16 @@ package com.kerware.simulateurreusine;
 
 import com.kerware.simulateur.SituationFamiliale;
 
+/**
+ * Simulateur d'impôt réusinée destiné à calculer l'impôt sur le revenu
+ * selon les règles fiscales françaises, en tenant compte de la situation
+ * familiale, du nombre d'enfants, des abattements et contributions exceptionnelles.
+ */
 public class SimulateurReusine {
 
+    /** Nombre maximum d'enfants pris en compte dans le calcul. */
     public static final int NB_MAX_ENFANTS = 7;
+
     private double contribExceptionnelle = 0;
     private double revenuRef = 0;
     private double abattement = 0;
@@ -14,22 +21,25 @@ public class SimulateurReusine {
     private int impotNet = 0;
 
     /**
+     * Calcule l'impôt sur le revenu net en fonction des paramètres fiscaux fournis.
      *
-     * @param revenu1
-     * @param revenu2
-     * @param situation
-     * @param nbEnfants
-     * @param nbEnfantsHandicapes
-     * @param parentIsol
-     * @return
+     * @param revenu1 Revenu net du déclarant 1
+     * @param revenu2 Revenu net du déclarant 2
+     * @param situation Situation familiale du foyer
+     * @param nbEnfants Nombre d’enfants à charge
+     * @param nbEnfantsHandicapes Nombre d’enfants à charge en situation de handicap
+     * @param parentIsol true si le foyer est composé d’un parent isolé, false sinon
+     * @return Montant final de l’impôt net à payer
      */
     public int calculerImpot(int revenu1, int revenu2, SituationFamiliale situation,
                              int nbEnfants, int nbEnfantsHandicapes, boolean parentIsol) {
+
         verifierDonnees(revenu1, revenu2, situation, nbEnfants,
                 nbEnfantsHandicapes, parentIsol);
 
         boolean couple = situation == SituationFamiliale.MARIE ||
                 situation == SituationFamiliale.PACSE;
+
         this.abattement = Abattement.calculer(revenu1, revenu2, couple);
         this.revenuRef = Math.max(0, revenu1 + revenu2 - abattement);
 
@@ -37,30 +47,33 @@ public class SimulateurReusine {
         this.nbParts = PartsFiscales.calculer(situation, nbEnfants,
                 nbEnfantsHandicapes, parentIsol);
 
-        double impotIndiv = ImpotBrut.calculer(revenuRef /
-                nbPartsDecl, ConstantesImpot.TRANCHES_REVENUS,
+        double impotIndiv = ImpotBrut.calculer(revenuRef / nbPartsDecl,
+                ConstantesImpot.TRANCHES_REVENUS,
                 ConstantesImpot.TAUX_IMPOSITION) * nbPartsDecl;
-        this.impotFoyer = ImpotBrut.calculer(revenuRef /
-                nbParts, ConstantesImpot.TRANCHES_REVENUS,
+
+        this.impotFoyer = ImpotBrut.calculer(revenuRef / nbParts,
+                ConstantesImpot.TRANCHES_REVENUS,
                 ConstantesImpot.TAUX_IMPOSITION) * nbParts;
 
-        double impotPlafonne = Plafonnement.appliquer(impotIndiv,
-                impotFoyer, nbParts, nbPartsDecl);
+        double impotPlafonne = Plafonnement.appliquer(impotIndiv, impotFoyer, nbParts, nbPartsDecl);
         this.decote = Decote.calculer(impotPlafonne, nbPartsDecl);
 
         this.contribExceptionnelle = ContributionExceptionnelle.calculer(revenuRef, nbPartsDecl);
         this.impotNet = (int) Math.round(impotPlafonne - decote + contribExceptionnelle);
+
         return impotNet;
     }
 
     /**
+     * Vérifie la validité des données d’entrée.
      *
-     * @param revenu1
-     * @param revenu2
-     * @param situation
-     * @param nbEnfants
-     * @param nbEnfantsHandicapes
-     * @param parentIsol
+     * @param revenu1 Revenu net du déclarant 1
+     * @param revenu2 Revenu net du déclarant 2
+     * @param situation Situation familiale
+     * @param nbEnfants Nombre d’enfants à charge
+     * @param nbEnfantsHandicapes Nombre d’enfants à charge en situation de handicap
+     * @param parentIsol Indique si le foyer est composé d’un parent isolé
+     * @throws IllegalArgumentException en cas de données incohérentes ou invalides
      */
     private void verifierDonnees(int revenu1, int revenu2, SituationFamiliale situation,
                                  int nbEnfants, int nbEnfantsHandicapes, boolean parentIsol) {
@@ -90,56 +103,49 @@ public class SimulateurReusine {
     }
 
     /**
-     *
-     * @return
+     * @return Montant de la contribution exceptionnelle à l’impôt
      */
     public double getContributionExceptionnelle(){
         return this.contribExceptionnelle;
     }
 
     /**
-     *
-     * @return
+     * @return Revenu fiscal de référence du foyer
      */
     public double getRevenuFiscalReference(){
         return this.revenuRef;
     }
 
     /**
-     *
-     * @return
+     * @return Montant de l’abattement appliqué au revenu
      */
     public double getAbattement(){
         return this.abattement;
     }
 
     /**
-     *
-     * @return
+     * @return Nombre de parts fiscales du foyer
      */
     public double getNombreParts(){
         return this.nbParts;
     }
 
     /**
-     *
-     * @return
+     * @return Montant final de l’impôt net après décote et contribution exceptionnelle
      */
     public double getImpotNet(){
         return this.impotNet;
     }
 
     /**
-     *
-     * @return
+     * @return Montant de la décote appliquée à l’impôt brut
      */
     public double getDecote(){
         return this.decote;
     }
 
     /**
-     *
-     * @return
+     * @return Montant de l’impôt brut avant application de la décote
      */
     public double getImpotAvantDecote(){
         return this.impotFoyer;
